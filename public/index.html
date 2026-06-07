@@ -1,334 +1,1263 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>転職サーチ - あなたに合った求人を探そう</title>
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Hiragino Sans', 'Meiryo', sans-serif; background: #f5f7fa; color: #333; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>転職サーチ - 求人検索</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* Header */
-  header { background: #1a73e8; color: white; padding: 0 20px; height: 60px; display: flex; align-items: center; gap: 20px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 6px rgba(0,0,0,.2); }
-  header h1 { font-size: 1.3rem; white-space: nowrap; }
-  header h1 span { font-size: .8rem; font-weight: normal; margin-left: 6px; opacity: .8; }
-  .header-search { flex: 1; max-width: 500px; display: flex; }
-  .header-search input { flex: 1; padding: 8px 14px; border: none; border-radius: 4px 0 0 4px; font-size: .95rem; outline: none; }
-  .header-search button { padding: 8px 16px; background: #fbbc04; border: none; border-radius: 0 4px 4px 0; cursor: pointer; font-weight: bold; color: #333; }
-  .header-search button:hover { background: #f9a800; }
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #1558b0;
+      --primary-light: #e8f0fe;
+      --secondary: #34a853;
+      --accent: #fbbc04;
+      --danger: #ea4335;
+      --bg: #f8f9fa;
+      --white: #ffffff;
+      --gray-50: #f8f9fa;
+      --gray-100: #f1f3f4;
+      --gray-200: #e8eaed;
+      --gray-300: #dadce0;
+      --gray-400: #bdc1c6;
+      --gray-500: #9aa0a6;
+      --gray-600: #80868b;
+      --gray-700: #5f6368;
+      --gray-800: #3c4043;
+      --gray-900: #202124;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 2px 8px rgba(0,0,0,0.12);
+      --shadow-lg: 0 4px 20px rgba(0,0,0,0.15);
+      --radius: 8px;
+      --radius-lg: 12px;
+    }
 
-  /* Layout */
-  .container { display: flex; max-width: 1200px; margin: 20px auto; padding: 0 16px; gap: 20px; }
+    body {
+      font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', sans-serif;
+      background: var(--bg);
+      color: var(--gray-900);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
 
-  /* Sidebar */
-  aside { width: 240px; flex-shrink: 0; }
-  .filter-card { background: white; border-radius: 8px; padding: 18px; box-shadow: 0 1px 4px rgba(0,0,0,.1); }
-  .filter-card h3 { font-size: .85rem; font-weight: bold; color: #555; margin-bottom: 14px; text-transform: uppercase; letter-spacing: .5px; border-bottom: 2px solid #1a73e8; padding-bottom: 8px; }
-  .filter-group { margin-bottom: 18px; }
-  .filter-group label { display: block; font-size: .85rem; color: #555; margin-bottom: 6px; font-weight: 600; }
-  .filter-group select, .filter-group input[type=text] { width: 100%; padding: 7px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: .88rem; outline: none; }
-  .filter-group select:focus, .filter-group input:focus { border-color: #1a73e8; }
-  .checkbox-group { display: flex; flex-direction: column; gap: 6px; }
-  .checkbox-group label { display: flex; align-items: center; gap: 7px; font-size: .88rem; cursor: pointer; color: #444; }
-  .checkbox-group input[type=checkbox] { accent-color: #1a73e8; }
-  .salary-display { text-align: center; font-size: .85rem; color: #1a73e8; font-weight: bold; margin-top: 6px; }
-  input[type=range] { width: 100%; accent-color: #1a73e8; }
-  .btn-search { width: 100%; padding: 10px; background: #1a73e8; color: white; border: none; border-radius: 6px; font-size: .95rem; cursor: pointer; font-weight: bold; margin-top: 4px; }
-  .btn-search:hover { background: #1558b0; }
-  .btn-reset { width: 100%; padding: 8px; background: white; color: #666; border: 1px solid #ddd; border-radius: 6px; font-size: .85rem; cursor: pointer; margin-top: 8px; }
-  .btn-reset:hover { background: #f5f5f5; }
+    /* ====== HEADER ====== */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow-sm);
+    }
 
-  /* Main */
-  main { flex: 1; min-width: 0; }
-  .results-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-  .results-count { font-size: .9rem; color: #555; }
-  .results-count strong { color: #1a73e8; font-size: 1.1rem; }
-  .sort-select { padding: 6px 10px; border: 1px solid #ddd; border-radius: 4px; font-size: .88rem; outline: none; }
+    .header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
 
-  /* Job Cards */
-  .job-card { background: white; border-radius: 8px; padding: 18px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.08); border: 1px solid #eee; transition: box-shadow .2s, border-color .2s; cursor: pointer; }
-  .job-card:hover { box-shadow: 0 4px 12px rgba(26,115,232,.15); border-color: #1a73e8; }
-  .job-title { font-size: 1.05rem; font-weight: bold; color: #1a73e8; margin-bottom: 4px; }
-  .job-company { font-size: .9rem; color: #555; margin-bottom: 8px; }
-  .job-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
-  .badge { font-size: .78rem; padding: 3px 9px; border-radius: 12px; font-weight: 500; }
-  .badge-location { background: #e8f0fe; color: #1a73e8; }
-  .badge-type { background: #e6f4ea; color: #137333; }
-  .badge-salary { background: #fce8e6; color: #c5221f; font-weight: bold; }
-  .badge-exp { background: #fef7e0; color: #8c5f00; }
-  .job-desc { font-size: .85rem; color: #666; line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 10px; }
-  .job-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
-  .tag { font-size: .75rem; padding: 2px 8px; background: #f1f3f4; color: #444; border-radius: 4px; }
-  .job-card-footer { display: flex; justify-content: flex-end; }
-  .btn-detail { padding: 7px 16px; background: #1a73e8; color: white; border: none; border-radius: 4px; font-size: .85rem; cursor: pointer; }
-  .btn-detail:hover { background: #1558b0; }
+    .logo {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      white-space: nowrap;
+      letter-spacing: -0.5px;
+    }
 
-  /* Empty state */
-  .empty { text-align: center; padding: 60px 20px; color: #888; }
-  .empty svg { margin-bottom: 14px; opacity: .4; }
-  .empty p { font-size: 1rem; }
+    .logo span { color: var(--secondary); }
 
-  /* Pagination */
-  .pagination { display: flex; justify-content: center; gap: 6px; margin-top: 20px; }
-  .pagination button { padding: 7px 12px; border: 1px solid #ddd; background: white; border-radius: 4px; cursor: pointer; font-size: .88rem; }
-  .pagination button.active { background: #1a73e8; color: white; border-color: #1a73e8; }
-  .pagination button:hover:not(.active) { background: #f1f3f4; }
-  .pagination button:disabled { opacity: .4; cursor: default; }
+    .header-search {
+      flex: 1;
+      max-width: 560px;
+      display: flex;
+      gap: 8px;
+    }
 
-  /* Spinner */
-  .spinner { display: flex; justify-content: center; align-items: center; padding: 50px; }
-  .spinner::after { content: ''; width: 36px; height: 36px; border: 4px solid #e8f0fe; border-top-color: #1a73e8; border-radius: 50%; animation: spin .8s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+    .header-search input {
+      flex: 1;
+      height: 40px;
+      padding: 0 16px;
+      border: 1.5px solid var(--gray-300);
+      border-radius: 20px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      font-family: inherit;
+    }
 
-  /* Modal */
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px; }
-  .modal { background: white; border-radius: 10px; max-width: 640px; width: 100%; max-height: 85vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,.25); }
-  .modal-header { padding: 20px 24px 16px; border-bottom: 1px solid #eee; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; position: sticky; top: 0; background: white; z-index: 1; }
-  .modal-header h2 { font-size: 1.1rem; color: #1a73e8; line-height: 1.4; }
-  .modal-close { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #888; flex-shrink: 0; line-height: 1; }
-  .modal-body { padding: 20px 24px 24px; }
-  .modal-company { font-size: 1rem; font-weight: bold; margin-bottom: 12px; }
-  .modal-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-  .modal-desc { font-size: .9rem; line-height: 1.8; color: #444; white-space: pre-wrap; margin-bottom: 16px; }
-  .modal-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
-  .btn-apply { width: 100%; padding: 12px; background: #1a73e8; color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; }
-  .btn-apply:hover { background: #1558b0; }
+    .header-search input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(26,115,232,0.12);
+    }
 
-  @media (max-width: 700px) {
-    .container { flex-direction: column; }
-    aside { width: 100%; }
-    header h1 span { display: none; }
-  }
-</style>
+    .btn-search-header {
+      height: 40px;
+      padding: 0 20px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+
+    .btn-search-header:hover { background: var(--primary-dark); }
+    .btn-search-header:active { transform: scale(0.97); }
+
+    /* ====== MAIN LAYOUT ====== */
+    .main-wrapper {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* ====== SIDEBAR ====== */
+    .sidebar {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200);
+      overflow: hidden;
+      position: sticky;
+      top: 88px;
+    }
+
+    .sidebar-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .sidebar-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--gray-800);
+    }
+
+    .btn-reset {
+      font-size: 12px;
+      color: var(--primary);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: background 0.2s;
+      font-family: inherit;
+    }
+
+    .btn-reset:hover { background: var(--primary-light); }
+
+    .filter-group {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .filter-group:last-child { border-bottom: none; }
+
+    .filter-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .filter-group input[type="text"],
+    .filter-group select {
+      width: 100%;
+      height: 38px;
+      padding: 0 12px;
+      border: 1.5px solid var(--gray-300);
+      border-radius: var(--radius);
+      font-size: 13px;
+      color: var(--gray-900);
+      background: var(--white);
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: inherit;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239aa0a6' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+      cursor: pointer;
+    }
+
+    .filter-group input[type="text"] {
+      background-image: none;
+      padding-right: 12px;
+      cursor: text;
+    }
+
+    .filter-group input[type="text"]:focus,
+    .filter-group select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(26,115,232,0.1);
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--gray-800);
+      user-select: none;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    /* Salary range slider */
+    .salary-range-wrapper { padding: 4px 0 8px; }
+
+    .salary-display {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .salary-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .salary-max-label {
+      font-size: 12px;
+      color: var(--gray-500);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 4px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+
+    .salary-ticks {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+    }
+
+    .salary-ticks span {
+      font-size: 10px;
+      color: var(--gray-500);
+    }
+
+    /* ====== CONTENT AREA ====== */
+    .content-area { min-width: 0; }
+
+    .result-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .result-count {
+      font-size: 15px;
+      color: var(--gray-700);
+    }
+
+    .result-count strong {
+      font-size: 20px;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .sort-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sort-label {
+      font-size: 13px;
+      color: var(--gray-600);
+      white-space: nowrap;
+    }
+
+    .sort-select {
+      height: 36px;
+      padding: 0 32px 0 12px;
+      border: 1.5px solid var(--gray-300);
+      border-radius: var(--radius);
+      font-size: 13px;
+      color: var(--gray-900);
+      background: var(--white);
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.2s;
+      font-family: inherit;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239aa0a6' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+    }
+
+    .sort-select:focus { border-color: var(--primary); }
+
+    /* ====== JOB CARDS ====== */
+    .job-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .job-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      cursor: pointer;
+      transition: box-shadow 0.2s, transform 0.15s, border-color 0.2s;
+      position: relative;
+    }
+
+    .job-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    .job-card-top {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .company-logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 10px;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      flex-shrink: 0;
+      border: 1px solid var(--gray-200);
+    }
+
+    .job-card-info { flex: 1; min-width: 0; }
+
+    .job-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 4px;
+      line-height: 1.4;
+    }
+
+    .company-name {
+      font-size: 13px;
+      color: var(--gray-600);
+      margin-bottom: 8px;
+    }
+
+    .job-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .badge-location { background: #e8f5e9; color: #2e7d32; }
+    .badge-salary   { background: #fff8e1; color: #f57f17; }
+    .badge-type     { background: var(--primary-light); color: var(--primary); }
+    .badge-exp      { background: #fce4ec; color: #c62828; }
+    .badge-new      { background: #ffebee; color: var(--danger); font-weight: 700; font-size: 11px; }
+
+    .job-desc {
+      font-size: 13px;
+      color: var(--gray-600);
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .job-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .tag {
+      padding: 2px 8px;
+      background: var(--gray-100);
+      color: var(--gray-700);
+      border-radius: 4px;
+      font-size: 11px;
+      border: 1px solid var(--gray-200);
+    }
+
+    .job-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .posted-date { font-size: 11px; color: var(--gray-500); }
+
+    .btn-detail {
+      height: 34px;
+      padding: 0 20px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 17px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-family: inherit;
+    }
+
+    .btn-detail:hover { background: var(--primary-dark); }
+
+    /* ====== LOADING ====== */
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(255,255,255,0.7);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .loading-overlay.active { display: flex; }
+
+    .spinner {
+      width: 44px;
+      height: 44px;
+      border: 4px solid var(--gray-200);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+    }
+
+    .loading-text { font-size: 14px; color: var(--gray-600); }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ====== EMPTY STATE ====== */
+    .empty-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 20px;
+      text-align: center;
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--gray-200);
+    }
+
+    .empty-state.active { display: flex; }
+    .empty-icon { font-size: 64px; margin-bottom: 16px; opacity: 0.5; }
+    .empty-title { font-size: 18px; font-weight: 700; color: var(--gray-700); margin-bottom: 8px; }
+    .empty-desc { font-size: 14px; color: var(--gray-500); max-width: 320px; }
+
+    /* ====== PAGINATION ====== */
+    .pagination {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      margin-top: 24px;
+    }
+
+    .page-btn {
+      min-width: 36px;
+      height: 36px;
+      padding: 0 8px;
+      border: 1.5px solid var(--gray-300);
+      border-radius: var(--radius);
+      background: var(--white);
+      color: var(--gray-700);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+
+    .page-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .page-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ====== MODAL ====== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 300;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 16px;
+      overflow-y: auto;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 700px;
+      box-shadow: var(--shadow-lg);
+      animation: modalIn 0.25s ease;
+      overflow: hidden;
+      margin: auto;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(-20px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .modal-header {
+      padding: 24px 28px 20px;
+      border-bottom: 1px solid var(--gray-100);
+      position: relative;
+    }
+
+    .modal-company { font-size: 13px; color: var(--gray-600); margin-bottom: 6px; }
+
+    .modal-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--gray-900);
+      line-height: 1.3;
+      margin-bottom: 14px;
+      padding-right: 40px;
+    }
+
+    .modal-meta { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: none;
+      background: var(--gray-100);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: var(--gray-600);
+      transition: background 0.2s;
+    }
+
+    .modal-close:hover { background: var(--gray-200); }
+
+    .modal-body {
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .detail-section-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--primary-light);
+    }
+
+    .detail-section-text {
+      font-size: 14px;
+      color: var(--gray-700);
+      line-height: 1.8;
+      white-space: pre-line;
+    }
+
+    .modal-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+    .modal-tag {
+      padding: 4px 12px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .modal-footer {
+      padding: 20px 28px;
+      border-top: 1px solid var(--gray-100);
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .btn-apply {
+      height: 44px;
+      padding: 0 32px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 22px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-family: inherit;
+    }
+
+    .btn-apply:hover { background: var(--primary-dark); }
+
+    .btn-close-modal {
+      height: 44px;
+      padding: 0 24px;
+      background: var(--white);
+      color: var(--gray-700);
+      border: 1.5px solid var(--gray-300);
+      border-radius: 22px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .btn-close-modal:hover { border-color: var(--gray-500); color: var(--gray-900); }
+
+    /* Active filter chips */
+    .active-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+
+    .filter-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .filter-chip button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--primary);
+      font-size: 14px;
+      line-height: 1;
+      padding: 0;
+      margin-left: 2px;
+    }
+
+    /* ====== RESPONSIVE ====== */
+    @media (max-width: 900px) {
+      .main-wrapper { grid-template-columns: 1fr; padding: 16px; }
+      .sidebar { position: static; }
+      .header-inner { padding: 0 16px; gap: 12px; }
+      .logo { font-size: 18px; }
+    }
+
+    @media (max-width: 600px) {
+      .header-search { max-width: none; }
+      .job-card-top { gap: 12px; }
+      .company-logo { width: 44px; height: 44px; font-size: 16px; }
+      .job-title { font-size: 14px; }
+      .modal-overlay { padding: 0; align-items: flex-end; }
+      .modal { border-radius: 12px 12px 0 0; margin-top: auto; }
+    }
+  </style>
 </head>
 <body>
 
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-text">求人を検索中...</div>
+</div>
+
+<!-- Modal Overlay -->
+<div class="modal-overlay" id="modalOverlay" onclick="handleModalOverlayClick(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModal()" aria-label="閉じる">&#10005;</button>
+      <div class="modal-company" id="modalCompany"></div>
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-meta" id="modalMeta"></div>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer">
+      <button class="btn-close-modal" onclick="closeModal()">閉じる</button>
+      <button class="btn-apply" onclick="alert('応募機能は近日公開予定です！')">この求人に応募する</button>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
 <header>
-  <h1>転職サーチ <span>あなたに合った求人を探そう</span></h1>
-  <div class="header-search">
-    <input type="text" id="headerKeyword" placeholder="職種・会社名・スキルで検索">
-    <button onclick="applyHeaderSearch()">検索</button>
+  <div class="header-inner">
+    <a href="#" class="logo">転職<span>サーチ</span></a>
+    <div class="header-search">
+      <input type="text" id="headerKeyword" placeholder="職種・会社名・スキルで検索">
+      <button class="btn-search-header" onclick="handleHeaderSearch()">検索</button>
+    </div>
   </div>
 </header>
 
-<div class="container">
-  <aside>
-    <div class="filter-card">
-      <h3>絞り込み</h3>
+<!-- Main -->
+<main class="main-wrapper">
 
-      <div class="filter-group">
-        <label>キーワード</label>
-        <input type="text" id="keyword" placeholder="例: エンジニア, React">
-      </div>
-
-      <div class="filter-group">
-        <label>勤務地</label>
-        <select id="location">
-          <option value="">全国</option>
-          <option value="東京">東京</option>
-          <option value="大阪">大阪</option>
-          <option value="名古屋">名古屋</option>
-          <option value="福岡">福岡</option>
-          <option value="リモート">リモート</option>
-        </select>
-      </div>
-
-      <div class="filter-group">
-        <label>雇用形態</label>
-        <div class="checkbox-group">
-          <label><input type="checkbox" value="fulltime"> 正社員</label>
-          <label><input type="checkbox" value="contract"> 契約社員</label>
-          <label><input type="checkbox" value="parttime"> パート/アルバイト</label>
-        </div>
-      </div>
-
-      <div class="filter-group">
-        <label>最低年収</label>
-        <input type="range" id="salary" min="0" max="1500" step="50" value="0">
-        <div class="salary-display" id="salaryDisplay">下限なし</div>
-      </div>
-
-      <div class="filter-group">
-        <label>経験年数</label>
-        <select id="experience">
-          <option value="0">不問</option>
-          <option value="1">1年以上</option>
-          <option value="3">3年以上</option>
-          <option value="5">5年以上</option>
-        </select>
-      </div>
-
-      <button class="btn-search" onclick="search(1)">この条件で検索</button>
-      <button class="btn-reset" onclick="resetFilters()">条件をリセット</button>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-title">絞り込み条件</span>
+      <button class="btn-reset" onclick="resetFilters()">リセット</button>
     </div>
-  </aside>
 
-  <main>
-    <div class="results-header">
-      <div class="results-count" id="resultsCount"></div>
-      <select class="sort-select" id="sortSelect" onchange="search(1)">
-        <option value="new">新着順</option>
-        <option value="salary">年収順（高い順）</option>
+    <div class="filter-group">
+      <label class="filter-label" for="sideKeyword">キーワード</label>
+      <input type="text" id="sideKeyword" placeholder="例：エンジニア、React、東京" oninput="onFilterChange()">
+    </div>
+
+    <div class="filter-group">
+      <label class="filter-label" for="locationFilter">勤務地</label>
+      <select id="locationFilter" onchange="onFilterChange()">
+        <option value="全国">全国</option>
+        <option value="東京">東京</option>
+        <option value="大阪">大阪</option>
+        <option value="名古屋">名古屋</option>
+        <option value="福岡">福岡</option>
+        <option value="リモート">リモート</option>
       </select>
     </div>
-    <div id="jobList"></div>
-    <div id="pagination" class="pagination"></div>
-  </main>
-</div>
 
-<div id="modal" class="modal-overlay" style="display:none" onclick="closeModal(event)">
-  <div class="modal" id="modalContent"></div>
-</div>
-
-<script>
-const JOB_TYPE_LABELS = { fulltime: '正社員', contract: '契約社員', parttime: 'パート/アルバイト' };
-
-let currentPage = 1;
-const LIMIT = 10;
-
-document.getElementById('salary').addEventListener('input', function() {
-  const v = parseInt(this.value);
-  document.getElementById('salaryDisplay').textContent = v === 0 ? '下限なし' : `${v}万円以上`;
-});
-
-document.getElementById('keyword').addEventListener('keydown', e => { if (e.key === 'Enter') search(1); });
-
-function getFilters() {
-  const jobTypes = [...document.querySelectorAll('.checkbox-group input:checked')].map(el => el.value);
-  return {
-    keyword: document.getElementById('keyword').value,
-    location: document.getElementById('location').value,
-    jobType: jobTypes.join(','),
-    minSalary: document.getElementById('salary').value,
-    experience: document.getElementById('experience').value,
-    sort: document.getElementById('sortSelect').value,
-  };
-}
-
-function applyHeaderSearch() {
-  const kw = document.getElementById('headerKeyword').value;
-  document.getElementById('keyword').value = kw;
-  search(1);
-}
-
-function resetFilters() {
-  document.getElementById('keyword').value = '';
-  document.getElementById('location').value = '';
-  document.getElementById('salary').value = 0;
-  document.getElementById('salaryDisplay').textContent = '下限なし';
-  document.getElementById('experience').value = '0';
-  document.querySelectorAll('.checkbox-group input').forEach(el => el.checked = false);
-  document.getElementById('headerKeyword').value = '';
-  search(1);
-}
-
-async function search(page) {
-  currentPage = page;
-  const filters = getFilters();
-  const params = new URLSearchParams({ ...filters, page, limit: LIMIT });
-  document.getElementById('jobList').innerHTML = '<div class="spinner"></div>';
-  document.getElementById('pagination').innerHTML = '';
-  document.getElementById('resultsCount').innerHTML = '';
-
-  try {
-    const res = await fetch(`/api/jobs?${params}`);
-    const data = await res.json();
-    renderJobs(data);
-  } catch (e) {
-    document.getElementById('jobList').innerHTML = '<div class="empty"><p>エラーが発生しました。再度お試しください。</p></div>';
-  }
-}
-
-function renderJobs({ jobs, total, page, limit }) {
-  const list = document.getElementById('jobList');
-  const countEl = document.getElementById('resultsCount');
-
-  if (jobs.length === 0) {
-    list.innerHTML = `<div class="empty">
-      <svg width="60" height="60" viewBox="0 0 24 24" fill="#aaa"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-      <p>条件に一致する求人が見つかりませんでした。<br>条件を変えて再度お試しください。</p>
-    </div>`;
-    countEl.innerHTML = '<strong>0</strong> 件の求人が見つかりました';
-    return;
-  }
-
-  countEl.innerHTML = `<strong>${total}</strong> 件の求人が見つかりました`;
-
-  list.innerHTML = jobs.map(job => `
-    <div class="job-card" onclick="showDetail(${job.id})">
-      <div class="job-title">${job.title}</div>
-      <div class="job-company">${job.company}</div>
-      <div class="job-meta">
-        <span class="badge badge-location">📍 ${job.location}</span>
-        <span class="badge badge-type">${JOB_TYPE_LABELS[job.jobType] || job.jobType}</span>
-        <span class="badge badge-salary">💴 ${job.salary}〜${job.salaryMax}万円</span>
-        <span class="badge badge-exp">経験 ${job.experience === 0 ? '不問' : job.experience + '年以上'}</span>
-      </div>
-      <div class="job-desc">${job.description}</div>
-      <div class="job-tags">${job.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
-      <div class="job-card-footer">
-        <button class="btn-detail" onclick="event.stopPropagation(); showDetail(${job.id})">詳細を見る →</button>
+    <div class="filter-group">
+      <label class="filter-label">雇用形態</label>
+      <div class="checkbox-group">
+        <label class="checkbox-item">
+          <input type="checkbox" value="fulltime" onchange="onFilterChange()"> 正社員
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" value="contract" onchange="onFilterChange()"> 契約社員・業務委託
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" value="parttime" onchange="onFilterChange()"> パート/アルバイト
+        </label>
+        <label class="checkbox-item">
+          <input type="checkbox" value="remote" onchange="onFilterChange()"> リモート専任
+        </label>
       </div>
     </div>
-  `).join('');
 
-  renderPagination(total, page, limit);
-}
+    <div class="filter-group">
+      <label class="filter-label">年収（最低）</label>
+      <div class="salary-range-wrapper">
+        <div class="salary-display">
+          <span class="salary-value" id="salaryDisplay">下限なし</span>
+          <span class="salary-max-label">〜1500万円+</span>
+        </div>
+        <input type="range" id="salaryRange" min="300" max="1500" step="50" value="300"
+          oninput="updateSalaryDisplay(this.value)" onchange="onFilterChange()">
+        <div class="salary-ticks">
+          <span>300万</span>
+          <span>600万</span>
+          <span>900万</span>
+          <span>1200万</span>
+          <span>1500万</span>
+        </div>
+      </div>
+    </div>
 
-function renderPagination(total, page, limit) {
-  const totalPages = Math.ceil(total / limit);
-  if (totalPages <= 1) return;
+    <div class="filter-group">
+      <label class="filter-label" for="experienceFilter">経験年数</label>
+      <select id="experienceFilter" onchange="onFilterChange()">
+        <option value="不問">不問</option>
+        <option value="1年以上">1年以上</option>
+        <option value="3年以上">3年以上</option>
+        <option value="5年以上">5年以上</option>
+      </select>
+    </div>
 
-  const pag = document.getElementById('pagination');
-  let html = `<button ${page === 1 ? 'disabled' : ''} onclick="search(${page - 1})">‹ 前へ</button>`;
+  </aside>
 
-  for (let i = 1; i <= totalPages; i++) {
-    if (i === 1 || i === totalPages || Math.abs(i - page) <= 2) {
-      html += `<button class="${i === page ? 'active' : ''}" onclick="search(${i})">${i}</button>`;
-    } else if (Math.abs(i - page) === 3) {
-      html += `<button disabled>…</button>`;
+  <!-- Content Area -->
+  <div class="content-area">
+
+    <div class="result-bar">
+      <div class="result-count">
+        <strong id="totalCount">0</strong>件の求人が見つかりました
+      </div>
+      <div class="sort-group">
+        <span class="sort-label">並び替え：</span>
+        <select class="sort-select" id="sortSelect" onchange="onSortChange()">
+          <option value="newest">新着順</option>
+          <option value="salary">年収順（高い順）</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="active-filters" id="activeFilters"></div>
+
+    <div class="job-list" id="jobList"></div>
+
+    <div class="empty-state" id="emptyState">
+      <div class="empty-icon">&#128269;</div>
+      <div class="empty-title">求人が見つかりませんでした</div>
+      <div class="empty-desc">検索条件を変えて、もう一度お試しください。フィルターをリセットすると全件表示されます。</div>
+    </div>
+
+    <div class="pagination" id="pagination"></div>
+
+  </div>
+</main>
+
+<script>
+  // ====== STATE ======
+  const state = {
+    currentPage: 1,
+    totalPages: 1,
+    totalCount: 0,
+    limit: 10,
+    sort: 'newest',
+    filters: {
+      keyword: '',
+      location: '全国',
+      jobTypes: [],
+      salary: 300,
+      experience: '不問'
+    }
+  };
+
+  let debounceTimer = null;
+
+  // ====== INIT ======
+  document.addEventListener('DOMContentLoaded', () => {
+    fetchJobs();
+  });
+
+  // ====== FILTER HANDLERS ======
+  function onFilterChange() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      syncFiltersFromUI();
+      state.currentPage = 1;
+      fetchJobs();
+    }, 350);
+  }
+
+  function onSortChange() {
+    state.sort = document.getElementById('sortSelect').value;
+    state.currentPage = 1;
+    fetchJobs();
+  }
+
+  function syncFiltersFromUI() {
+    state.filters.keyword = document.getElementById('sideKeyword').value;
+    state.filters.location = document.getElementById('locationFilter').value;
+    state.filters.experience = document.getElementById('experienceFilter').value;
+    state.filters.salary = parseInt(document.getElementById('salaryRange').value) || 300;
+    const checked = document.querySelectorAll('.checkbox-group input[type=checkbox]:checked');
+    state.filters.jobTypes = Array.from(checked).map(c => c.value);
+  }
+
+  function updateSalaryDisplay(val) {
+    const n = parseInt(val);
+    document.getElementById('salaryDisplay').textContent = n <= 300 ? '下限なし' : n + '万円〜';
+  }
+
+  function handleHeaderSearch() {
+    const kw = document.getElementById('headerKeyword').value;
+    document.getElementById('sideKeyword').value = kw;
+    syncFiltersFromUI();
+    state.currentPage = 1;
+    fetchJobs();
+  }
+
+  document.getElementById('headerKeyword').addEventListener('keydown', e => {
+    if (e.key === 'Enter') handleHeaderSearch();
+  });
+
+  document.getElementById('sideKeyword').addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      clearTimeout(debounceTimer);
+      syncFiltersFromUI();
+      state.currentPage = 1;
+      fetchJobs();
+    }
+  });
+
+  function resetFilters() {
+    document.getElementById('sideKeyword').value = '';
+    document.getElementById('headerKeyword').value = '';
+    document.getElementById('locationFilter').value = '全国';
+    document.getElementById('experienceFilter').value = '不問';
+    document.getElementById('salaryRange').value = 300;
+    document.getElementById('sortSelect').value = 'newest';
+    document.querySelectorAll('.checkbox-group input[type=checkbox]').forEach(c => c.checked = false);
+    updateSalaryDisplay(300);
+    state.filters = { keyword: '', location: '全国', jobTypes: [], salary: 300, experience: '不問' };
+    state.sort = 'newest';
+    state.currentPage = 1;
+    fetchJobs();
+  }
+
+  // ====== FETCH ======
+  async function fetchJobs() {
+    showLoading(true);
+    const params = new URLSearchParams();
+    if (state.filters.keyword) params.set('keyword', state.filters.keyword);
+    if (state.filters.location && state.filters.location !== '全国') params.set('location', state.filters.location);
+    if (state.filters.jobTypes.length > 0) params.set('jobType', state.filters.jobTypes.join(','));
+    if (state.filters.salary > 300) params.set('salary', state.filters.salary);
+    if (state.filters.experience && state.filters.experience !== '不問') params.set('experience', state.filters.experience);
+    params.set('sort', state.sort);
+    params.set('page', state.currentPage);
+    params.set('limit', state.limit);
+
+    try {
+      const res = await fetch('/api/jobs?' + params.toString());
+      const data = await res.json();
+      state.totalPages = data.totalPages;
+      state.totalCount = data.total;
+      renderJobs(data.jobs);
+      renderPagination(data.page, data.totalPages);
+      document.getElementById('totalCount').textContent = data.total.toLocaleString();
+      renderActiveFilters();
+    } catch (err) {
+      console.error('Fetch error:', err);
+    } finally {
+      showLoading(false);
     }
   }
 
-  html += `<button ${page === totalPages ? 'disabled' : ''} onclick="search(${page + 1})">次へ ›</button>`;
-  pag.innerHTML = html;
-}
+  // ====== RENDER JOBS ======
+  const JOB_TYPE_LABELS = {
+    fulltime: '正社員',
+    contract: '契約・業務委託',
+    parttime: 'パート/アルバイト',
+    remote: 'リモート専任'
+  };
 
-async function showDetail(id) {
-  const res = await fetch(`/api/jobs/${id}`);
-  const job = await res.json();
-  document.getElementById('modalContent').innerHTML = `
-    <div class="modal-header">
-      <h2>${job.title}</h2>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="modal-company">🏢 ${job.company}</div>
-      <div class="modal-meta">
-        <span class="badge badge-location">📍 ${job.location}</span>
-        <span class="badge badge-type">${JOB_TYPE_LABELS[job.jobType] || job.jobType}</span>
-        <span class="badge badge-salary">💴 ${job.salary}〜${job.salaryMax}万円</span>
-        <span class="badge badge-exp">経験 ${job.experience === 0 ? '不問' : job.experience + '年以上'}</span>
-      </div>
-      <div class="modal-desc">${job.description}</div>
-      <div class="modal-tags">${job.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
-      <button class="btn-apply" onclick="alert('実際のサービスでは応募ページに遷移します')">この求人に応募する</button>
-    </div>
-  `;
-  document.getElementById('modal').style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-}
+  const JOB_TYPE_COLORS = {
+    fulltime: 'badge-type',
+    contract: 'badge-exp',
+    parttime: 'badge-location',
+    remote: 'badge-salary'
+  };
 
-function closeModal(event) {
-  if (!event || event.target === document.getElementById('modal')) {
-    document.getElementById('modal').style.display = 'none';
+  function isNew(postedAt) {
+    const posted = new Date(postedAt);
+    const now = new Date('2026-06-07');
+    return (now - posted) / (1000 * 60 * 60 * 24) <= 7;
+  }
+
+  function getCompanyInitial(name) {
+    const cleaned = name.replace(/株式会社|合同会社|有限会社|社会福祉法人|学校法人|社会医療法人/g, '').trim();
+    return cleaned.charAt(0) || '?';
+  }
+
+  function renderJobs(jobs) {
+    const list = document.getElementById('jobList');
+    const empty = document.getElementById('emptyState');
+    if (!jobs || jobs.length === 0) {
+      list.innerHTML = '';
+      empty.classList.add('active');
+      return;
+    }
+    empty.classList.remove('active');
+    list.innerHTML = jobs.map(job => createJobCard(job)).join('');
+  }
+
+  function createJobCard(job) {
+    const typeLabel = JOB_TYPE_LABELS[job.jobType] || job.jobType;
+    const typeClass = JOB_TYPE_COLORS[job.jobType] || 'badge-type';
+    const newBadge = isNew(job.postedAt) ? '<span class="meta-badge badge-new">NEW</span>' : '';
+    const salaryText = job.salary === job.salaryMax
+      ? job.salary + '万円'
+      : job.salary + '〜' + job.salaryMax + '万円';
+    const expText = job.experience === 0 ? '経験不問' : '経験' + job.experience + '年以上';
+    const tags = job.tags.slice(0, 4).map(t => '<span class="tag">' + escHtml(t) + '</span>').join('');
+    const initial = getCompanyInitial(job.company);
+    const postedFormatted = job.postedAt.replace(/-/g, '/');
+
+    return '<div class="job-card" onclick="openJobDetail(' + job.id + ')">' +
+      '<div class="job-card-top">' +
+        '<div class="company-logo">' + escHtml(initial) + '</div>' +
+        '<div class="job-card-info">' +
+          '<div class="job-title">' + escHtml(job.title) + '</div>' +
+          '<div class="company-name">' + escHtml(job.company) + '</div>' +
+          '<div class="job-meta">' +
+            newBadge +
+            '<span class="meta-badge badge-location">&#128205; ' + escHtml(job.location) + '</span>' +
+            '<span class="meta-badge badge-salary">&#165; ' + escHtml(salaryText) + '</span>' +
+            '<span class="meta-badge ' + typeClass + '">' + escHtml(typeLabel) + '</span>' +
+            '<span class="meta-badge badge-exp">' + escHtml(expText) + '</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="job-desc">' + escHtml(job.description) + '</div>' +
+      '<div class="job-tags">' + tags + '</div>' +
+      '<div class="job-card-footer">' +
+        '<span class="posted-date">掲載日：' + escHtml(postedFormatted) + '</span>' +
+        '<button class="btn-detail" onclick="event.stopPropagation(); openJobDetail(' + job.id + ')">詳細を見る</button>' +
+      '</div>' +
+    '</div>';
+  }
+
+  // ====== JOB DETAIL MODAL ======
+  async function openJobDetail(id) {
+    showLoading(true);
+    try {
+      const res = await fetch('/api/jobs/' + id);
+      const job = await res.json();
+      renderModal(job);
+      document.getElementById('modalOverlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    } catch (err) {
+      console.error('Error loading job detail:', err);
+    } finally {
+      showLoading(false);
+    }
+  }
+
+  function renderModal(job) {
+    const typeLabel = JOB_TYPE_LABELS[job.jobType] || job.jobType;
+    const typeClass = JOB_TYPE_COLORS[job.jobType] || 'badge-type';
+    const salaryText = job.salary === job.salaryMax
+      ? job.salary + '万円'
+      : job.salary + '〜' + job.salaryMax + '万円';
+    const expText = job.experience === 0 ? '経験不問' : '経験' + job.experience + '年以上';
+
+    document.getElementById('modalCompany').textContent = job.company;
+    document.getElementById('modalTitle').textContent = job.title;
+    document.getElementById('modalMeta').innerHTML =
+      '<span class="meta-badge badge-location">&#128205; ' + escHtml(job.location) + '</span>' +
+      '<span class="meta-badge badge-salary">&#165; ' + escHtml(salaryText) + '</span>' +
+      '<span class="meta-badge ' + typeClass + '">' + escHtml(typeLabel) + '</span>' +
+      '<span class="meta-badge badge-exp">' + escHtml(expText) + '</span>';
+
+    const tags = job.tags.map(t => '<span class="modal-tag">' + escHtml(t) + '</span>').join('');
+    const postedFormatted = job.postedAt.replace(/-/g, '/');
+
+    document.getElementById('modalBody').innerHTML =
+      '<div class="detail-section">' +
+        '<div class="detail-section-title">求人概要</div>' +
+        '<div class="detail-section-text">' + escHtml(job.description) + '</div>' +
+      '</div>' +
+      '<div class="detail-section">' +
+        '<div class="detail-section-title">応募要件</div>' +
+        '<div class="detail-section-text">' + escHtml(job.requirements) + '</div>' +
+      '</div>' +
+      '<div class="detail-section">' +
+        '<div class="detail-section-title">福利厚生・待遇</div>' +
+        '<div class="detail-section-text">' + escHtml(job.benefits) + '</div>' +
+      '</div>' +
+      '<div class="detail-section">' +
+        '<div class="detail-section-title">スキル・タグ</div>' +
+        '<div class="modal-tags">' + tags + '</div>' +
+      '</div>' +
+      '<div class="detail-section">' +
+        '<div class="detail-section-text" style="font-size:12px;color:var(--gray-500)">掲載日：' + escHtml(postedFormatted) + ' ／ 業界：' + escHtml(job.industry) + '</div>' +
+      '</div>';
+  }
+
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('active');
     document.body.style.overflow = '';
   }
-}
 
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  function handleModalOverlayClick(e) {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+  }
 
-search(1);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // ====== PAGINATION ======
+  function renderPagination(current, total) {
+    const container = document.getElementById('pagination');
+    if (total <= 1) { container.innerHTML = ''; return; }
+
+    let html = '<button class="page-btn" onclick="goToPage(' + (current - 1) + ')" ' + (current === 1 ? 'disabled' : '') + '>&#8249;</button>';
+
+    const pages = getPageNumbers(current, total);
+    pages.forEach(p => {
+      if (p === '...') {
+        html += '<span style="padding:0 6px;color:var(--gray-500)">…</span>';
+      } else {
+        html += '<button class="page-btn ' + (p === current ? 'active' : '') + '" onclick="goToPage(' + p + ')">' + p + '</button>';
+      }
+    });
+
+    html += '<button class="page-btn" onclick="goToPage(' + (current + 1) + ')" ' + (current === total ? 'disabled' : '') + '>&#8250;</button>';
+    container.innerHTML = html;
+  }
+
+  function getPageNumbers(current, total) {
+    if (total <= 7) return Array.from({length: total}, (_, i) => i + 1);
+    const pages = [1];
+    if (current > 3) pages.push('...');
+    for (let i = Math.max(2, current - 1); i <= Math.min(total - 1, current + 1); i++) {
+      pages.push(i);
+    }
+    if (current < total - 2) pages.push('...');
+    pages.push(total);
+    return pages;
+  }
+
+  function goToPage(page) {
+    if (page < 1 || page > state.totalPages) return;
+    state.currentPage = page;
+    fetchJobs();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ====== ACTIVE FILTERS ======
+  function renderActiveFilters() {
+    const container = document.getElementById('activeFilters');
+    const chips = [];
+
+    if (state.filters.keyword) {
+      chips.push({ label: 'キーワード: ' + state.filters.keyword, clear: () => {
+        document.getElementById('sideKeyword').value = '';
+        document.getElementById('headerKeyword').value = '';
+        state.filters.keyword = '';
+        state.currentPage = 1; fetchJobs();
+      }});
+    }
+    if (state.filters.location !== '全国') {
+      chips.push({ label: '勤務地: ' + state.filters.location, clear: () => {
+        document.getElementById('locationFilter').value = '全国';
+        state.filters.location = '全国';
+        state.currentPage = 1; fetchJobs();
+      }});
+    }
+    if (state.filters.jobTypes.length > 0) {
+      const labels = state.filters.jobTypes.map(t => JOB_TYPE_LABELS[t] || t).join('・');
+      chips.push({ label: '雇用形態: ' + labels, clear: () => {
+        document.querySelectorAll('.checkbox-group input[type=checkbox]').forEach(c => c.checked = false);
+        state.filters.jobTypes = [];
+        state.currentPage = 1; fetchJobs();
+      }});
+    }
+    if (state.filters.salary > 300) {
+      chips.push({ label: '年収: ' + state.filters.salary + '万円以上', clear: () => {
+        document.getElementById('salaryRange').value = 300;
+        updateSalaryDisplay(300);
+        state.filters.salary = 300;
+        state.currentPage = 1; fetchJobs();
+      }});
+    }
+    if (state.filters.experience !== '不問') {
+      chips.push({ label: '経験: ' + state.filters.experience, clear: () => {
+        document.getElementById('experienceFilter').value = '不問';
+        state.filters.experience = '不問';
+        state.currentPage = 1; fetchJobs();
+      }});
+    }
+
+    if (chips.length === 0) { container.innerHTML = ''; return; }
+
+    container.innerHTML = chips.map((chip, i) =>
+      '<span class="filter-chip">' +
+        escHtml(chip.label) +
+        '<button onclick="clearChip(' + i + ')" aria-label="削除">&#10005;</button>' +
+      '</span>'
+    ).join('');
+
+    window._chipClearFns = chips.map(c => c.clear);
+  }
+
+  function clearChip(index) {
+    if (window._chipClearFns && window._chipClearFns[index]) {
+      window._chipClearFns[index]();
+    }
+  }
+
+  // ====== UTILS ======
+  function showLoading(show) {
+    document.getElementById('loadingOverlay').classList.toggle('active', show);
+  }
+
+  function escHtml(str) {
+    if (str == null) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
 </script>
 </body>
 </html>
