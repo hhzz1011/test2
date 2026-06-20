@@ -693,6 +693,108 @@
 
     .btn-close-modal:hover { border-color: var(--gray-500); color: var(--gray-900); }
 
+    /* ====== TABS ====== */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--gray-200);
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      border: none;
+      background: none;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-600);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      font-family: inherit;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tab-btn:hover { color: var(--primary); }
+
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .tab-badge {
+      background: var(--primary);
+      color: white;
+      border-radius: 100px;
+      font-size: 11px;
+      padding: 1px 7px;
+    }
+
+    .indeed-badge {
+      background: #2164f3;
+      color: white;
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    /* Indeed card */
+    .indeed-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .indeed-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary);
+    }
+
+    .indeed-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .indeed-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      line-height: 1.4;
+    }
+
+    .indeed-card-title:hover { text-decoration: underline; }
+
+    .indeed-card-company { font-size: 13px; color: var(--gray-700); font-weight: 600; }
+
+    .indeed-card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--gray-600);
+    }
+
+    .indeed-card-meta span { display: flex; align-items: center; gap: 4px; }
+
+    .indeed-updated {
+      font-size: 12px;
+      color: var(--gray-500);
+      margin-top: 8px;
+    }
+
     /* Active filter chips */
     .active-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
 
@@ -852,11 +954,21 @@
   <!-- Content Area -->
   <div class="content-area">
 
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" id="tabMock" onclick="switchTab('mock')">
+        掲載求人 <span class="tab-badge" id="mockBadge">55</span>
+      </button>
+      <button class="tab-btn" id="tabIndeed" onclick="switchTab('indeed')">
+        <span class="indeed-badge">indeed</span> リアルタイム求人 <span class="tab-badge" id="indeedBadge">60</span>
+      </button>
+    </div>
+
     <div class="result-bar">
       <div class="result-count">
         <strong id="totalCount">0</strong>件の求人が見つかりました
       </div>
-      <div class="sort-group">
+      <div class="sort-group" id="sortGroupEl">
         <span class="sort-label">並び替え：</span>
         <select class="sort-select" id="sortSelect" onchange="onSortChange()">
           <option value="newest">新着順</option>
@@ -864,6 +976,7 @@
         </select>
       </div>
     </div>
+    <div id="indeedUpdatedAt" class="indeed-updated" style="display:none"></div>
 
     <div class="active-filters" id="activeFilters"></div>
 
@@ -888,6 +1001,7 @@
     totalCount: 0,
     limit: 10,
     sort: 'newest',
+    activeTab: 'mock',
     filters: {
       keyword: '',
       location: '全国',
@@ -898,6 +1012,77 @@
   };
 
   let debounceTimer = null;
+
+  // ====== TABS ======
+  function switchTab(tab) {
+    state.activeTab = tab;
+    document.getElementById('tabMock').classList.toggle('active', tab === 'mock');
+    document.getElementById('tabIndeed').classList.toggle('active', tab === 'indeed');
+    document.getElementById('sortGroupEl').style.display = tab === 'mock' ? '' : 'none';
+    document.getElementById('activeFilters').style.display = tab === 'mock' ? '' : 'none';
+    state.currentPage = 1;
+    if (tab === 'indeed') fetchIndeedJobs();
+    else fetchJobs();
+  }
+
+  // ====== INDEED FETCH ======
+  async function fetchIndeedJobs() {
+    showLoading(true);
+    const keyword = document.getElementById('headerKeyword').value || document.getElementById('sideKeyword').value;
+    const location = document.getElementById('locationFilter').value;
+    const params = new URLSearchParams();
+    if (keyword) params.set('keyword', keyword);
+    if (location !== '全国') params.set('location', location);
+
+    try {
+      const res = await fetch('/api/indeed-jobs?' + params.toString());
+      const data = await res.json();
+      renderIndeedJobs(data);
+    } catch (e) {
+      document.getElementById('jobList').innerHTML = '<p style="color:red;padding:20px">データの取得に失敗しました</p>';
+    } finally {
+      showLoading(false);
+    }
+  }
+
+  function renderIndeedJobs(data) {
+    document.getElementById('totalCount').textContent = data.total;
+    document.getElementById('indeedBadge').textContent = data.total;
+    const updatedEl = document.getElementById('indeedUpdatedAt');
+    if (data.updatedAt) {
+      updatedEl.style.display = '';
+      updatedEl.textContent = 'Indeed データ更新日時: ' + new Date(data.updatedAt).toLocaleString('ja-JP');
+    } else {
+      updatedEl.style.display = 'none';
+    }
+    document.getElementById('pagination').innerHTML = '';
+
+    const list = document.getElementById('jobList');
+    const empty = document.getElementById('emptyState');
+
+    if (!data.jobs || data.jobs.length === 0) {
+      list.innerHTML = '';
+      empty.style.display = 'flex';
+      return;
+    }
+
+    empty.style.display = 'none';
+    list.innerHTML = data.jobs.map(job => {
+      const date = job.postedAt ? new Date(job.postedAt).toLocaleDateString('ja-JP') : '';
+      return '<div class="indeed-card">' +
+        '<div class="indeed-card-header">' +
+          '<a class="indeed-card-title" href="' + escHtml(job.applyUrl) + '" target="_blank" rel="noopener">' + escHtml(job.title) + ' &#8599;</a>' +
+        '</div>' +
+        '<div class="indeed-card-company">' + escHtml(job.company) + '</div>' +
+        '<div class="indeed-card-meta">' +
+          '<span>📍 ' + escHtml(job.location) + '</span>' +
+          '<span>💼 ' + escHtml(job.jobType) + '</span>' +
+          (date ? '<span>📅 ' + date + '</span>' : '') +
+        '</div>' +
+        '<div style="margin-top:6px"><a href="' + escHtml(job.applyUrl) + '" target="_blank" rel="noopener" style="font-size:13px;color:var(--primary);font-weight:600;text-decoration:none;">Indeed で詳細・応募 →</a></div>' +
+      '</div>';
+    }).join('<div style="height:10px"></div>');
+  }
 
   // ====== INIT ======
   document.addEventListener('DOMContentLoaded', () => {

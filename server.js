@@ -989,6 +989,38 @@ app.get('/api/jobs/:id', (req, res) => {
   res.json(job);
 });
 
+// GET /api/indeed-jobs - Indeed実データ検索
+app.get('/api/indeed-jobs', (req, res) => {
+  const fs = require('fs');
+  const cachePath = path.join(__dirname, 'data', 'indeed-cache.json');
+  let allJobs = [];
+  try {
+    allJobs = JSON.parse(fs.readFileSync(cachePath, 'utf8'));
+  } catch (e) {
+    return res.json({ total: 0, jobs: [], updatedAt: null });
+  }
+
+  const { keyword = '', location = '' } = req.query;
+  let filtered = allJobs;
+
+  if (keyword) {
+    const kw = keyword.toLowerCase();
+    filtered = filtered.filter(j =>
+      j.title.toLowerCase().includes(kw) ||
+      j.company.toLowerCase().includes(kw) ||
+      (j.keyword && j.keyword.toLowerCase().includes(kw))
+    );
+  }
+  if (location && location !== '全国') {
+    filtered = filtered.filter(j =>
+      j.location.includes(location) || j.searchLocation === location
+    );
+  }
+
+  const stat = fs.statSync(cachePath);
+  res.json({ total: filtered.length, jobs: filtered, updatedAt: stat.mtime });
+});
+
 // Serve index.html for all other routes
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
