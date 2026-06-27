@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    { "source": "/api/indeed-jobs", "destination": "/api/indeed-jobs" },
+    { "source": "/api/jobs/:id", "destination": "/api/jobs/[id]" },
+    { "source": "/api/jobs", "destination": "/api/jobs/index" },
+    { "source": "/(.*)", "destination": "/public/index.html" }
+  ]
+}
