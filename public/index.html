@@ -466,6 +466,91 @@
 
     .btn-detail:hover { background: var(--primary-dark); }
 
+    /* ====== LINKEDIN ====== */
+    .job-card-actions { display: flex; align-items: center; gap: 8px; }
+
+    .btn-li-share {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 34px;
+      padding: 0 14px;
+      background: #fff;
+      color: #0a66c2;
+      border: 1px solid #0a66c2;
+      border-radius: 17px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-family: inherit;
+    }
+
+    .btn-li-share:hover { background: #eaf3fb; }
+    .btn-li-share svg { width: 14px; height: 14px; fill: currentColor; }
+
+    .btn-li-login {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 38px;
+      padding: 0 16px;
+      background: #0a66c2;
+      color: #fff;
+      border: none;
+      border-radius: 19px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      text-decoration: none;
+      font-family: inherit;
+    }
+
+    .btn-li-login:hover { background: #004182; }
+    .btn-li-login svg { width: 16px; height: 16px; fill: currentColor; }
+
+    .li-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .li-user img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .li-user-name { font-size: 13px; font-weight: 600; color: var(--gray-800); }
+
+    .btn-li-logout {
+      background: none;
+      border: none;
+      color: var(--gray-500);
+      font-size: 12px;
+      cursor: pointer;
+      text-decoration: underline;
+      font-family: inherit;
+    }
+
+    .li-banner {
+      margin: 12px 0 0;
+      padding: 10px 14px;
+      background: #fdecea;
+      border: 1px solid #f5c2bd;
+      border-radius: 8px;
+      color: #a12b1e;
+      font-size: 13px;
+    }
+
+    @media (max-width: 768px) {
+      .li-user-name, .btn-li-login span { display: none; }
+      .btn-li-login { padding: 0 12px; }
+    }
+
     /* ====== LOADING ====== */
     .loading-overlay {
       display: none;
@@ -693,6 +778,108 @@
 
     .btn-close-modal:hover { border-color: var(--gray-500); color: var(--gray-900); }
 
+    /* ====== TABS ====== */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--gray-200);
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      border: none;
+      background: none;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--gray-600);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      font-family: inherit;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tab-btn:hover { color: var(--primary); }
+
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .tab-badge {
+      background: var(--primary);
+      color: white;
+      border-radius: 100px;
+      font-size: 11px;
+      padding: 1px 7px;
+    }
+
+    .indeed-badge {
+      background: #2164f3;
+      color: white;
+      font-size: 10px;
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    /* Indeed card */
+    .indeed-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .indeed-card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--primary);
+    }
+
+    .indeed-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .indeed-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      line-height: 1.4;
+    }
+
+    .indeed-card-title:hover { text-decoration: underline; }
+
+    .indeed-card-company { font-size: 13px; color: var(--gray-700); font-weight: 600; }
+
+    .indeed-card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--gray-600);
+    }
+
+    .indeed-card-meta span { display: flex; align-items: center; gap: 4px; }
+
+    .indeed-updated {
+      font-size: 12px;
+      color: var(--gray-500);
+      margin-top: 8px;
+    }
+
     /* Active filter chips */
     .active-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
 
@@ -770,6 +957,7 @@
       <input type="text" id="headerKeyword" placeholder="職種・会社名・スキルで検索">
       <button class="btn-search-header" onclick="handleHeaderSearch()">検索</button>
     </div>
+    <div id="linkedinArea"></div>
   </div>
 </header>
 
@@ -852,11 +1040,21 @@
   <!-- Content Area -->
   <div class="content-area">
 
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab-btn active" id="tabMock" onclick="switchTab('mock')">
+        掲載求人 <span class="tab-badge" id="mockBadge">55</span>
+      </button>
+      <button class="tab-btn" id="tabIndeed" onclick="switchTab('indeed')">
+        <span class="indeed-badge">indeed</span> リアルタイム求人 <span class="tab-badge" id="indeedBadge">60</span>
+      </button>
+    </div>
+
     <div class="result-bar">
       <div class="result-count">
         <strong id="totalCount">0</strong>件の求人が見つかりました
       </div>
-      <div class="sort-group">
+      <div class="sort-group" id="sortGroupEl">
         <span class="sort-label">並び替え：</span>
         <select class="sort-select" id="sortSelect" onchange="onSortChange()">
           <option value="newest">新着順</option>
@@ -864,6 +1062,7 @@
         </select>
       </div>
     </div>
+    <div id="indeedUpdatedAt" class="indeed-updated" style="display:none"></div>
 
     <div class="active-filters" id="activeFilters"></div>
 
@@ -888,6 +1087,7 @@
     totalCount: 0,
     limit: 10,
     sort: 'newest',
+    activeTab: 'mock',
     filters: {
       keyword: '',
       location: '全国',
@@ -899,10 +1099,202 @@
 
   let debounceTimer = null;
 
+  // ====== TABS ======
+  function switchTab(tab) {
+    state.activeTab = tab;
+    document.getElementById('tabMock').classList.toggle('active', tab === 'mock');
+    document.getElementById('tabIndeed').classList.toggle('active', tab === 'indeed');
+    document.getElementById('sortGroupEl').style.display = tab === 'mock' ? '' : 'none';
+    document.getElementById('activeFilters').style.display = tab === 'mock' ? '' : 'none';
+    state.currentPage = 1;
+    if (tab === 'indeed') fetchIndeedJobs();
+    else fetchJobs();
+  }
+
+  // ====== INDEED FETCH ======
+  async function fetchIndeedJobs() {
+    showLoading(true);
+    const keyword = document.getElementById('headerKeyword').value || document.getElementById('sideKeyword').value;
+    const location = document.getElementById('locationFilter').value;
+    const params = new URLSearchParams();
+    if (keyword) params.set('keyword', keyword);
+    if (location !== '全国') params.set('location', location);
+
+    try {
+      const res = await fetch('/api/indeed-jobs?' + params.toString());
+      const data = await res.json();
+      renderIndeedJobs(data);
+    } catch (e) {
+      document.getElementById('jobList').innerHTML = '<p style="color:red;padding:20px">データの取得に失敗しました</p>';
+    } finally {
+      showLoading(false);
+    }
+  }
+
+  function renderIndeedJobs(data) {
+    document.getElementById('totalCount').textContent = data.total;
+    document.getElementById('indeedBadge').textContent = data.total;
+    const updatedEl = document.getElementById('indeedUpdatedAt');
+    if (data.updatedAt) {
+      updatedEl.style.display = '';
+      updatedEl.textContent = 'Indeed データ更新日時: ' + new Date(data.updatedAt).toLocaleString('ja-JP');
+    } else {
+      updatedEl.style.display = 'none';
+    }
+    document.getElementById('pagination').innerHTML = '';
+
+    const list = document.getElementById('jobList');
+    const empty = document.getElementById('emptyState');
+
+    if (!data.jobs || data.jobs.length === 0) {
+      list.innerHTML = '';
+      empty.style.display = 'flex';
+      return;
+    }
+
+    empty.style.display = 'none';
+    list.innerHTML = data.jobs.map(job => {
+      const date = job.postedAt ? new Date(job.postedAt).toLocaleDateString('ja-JP') : '';
+      return '<div class="indeed-card">' +
+        '<div class="indeed-card-header">' +
+          '<a class="indeed-card-title" href="' + escHtml(job.applyUrl) + '" target="_blank" rel="noopener">' + escHtml(job.title) + ' &#8599;</a>' +
+        '</div>' +
+        '<div class="indeed-card-company">' + escHtml(job.company) + '</div>' +
+        '<div class="indeed-card-meta">' +
+          '<span>📍 ' + escHtml(job.location) + '</span>' +
+          '<span>💼 ' + escHtml(job.jobType) + '</span>' +
+          (date ? '<span>📅 ' + date + '</span>' : '') +
+        '</div>' +
+        '<div style="margin-top:6px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">' +
+          '<a href="' + escHtml(job.applyUrl) + '" target="_blank" rel="noopener" style="font-size:13px;color:var(--primary);font-weight:600;text-decoration:none;">Indeed で詳細・応募 →</a>' +
+          '<button class="btn-li-share" title="LinkedInでシェア" onclick="shareUrlOnLinkedIn(\'' + escAttrJs(job.applyUrl) + '\')">' + LI_ICON + 'シェア</button>' +
+        '</div>' +
+      '</div>';
+    }).join('<div style="height:10px"></div>');
+  }
+
   // ====== INIT ======
   document.addEventListener('DOMContentLoaded', () => {
     fetchJobs();
+    initLinkedIn();
+    openSharedJobFromUrl();
   });
+
+  // シェアされた /?job=<id> のリンクを開いたときに詳細モーダルを表示する
+  function openSharedJobFromUrl() {
+    const id = new URLSearchParams(location.search).get('job');
+    if (id) openJobDetail(id);
+  }
+
+  // ====== LINKEDIN ======
+  const LI_STORAGE_KEY = 'linkedinProfile';
+  const LI_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>';
+
+  // localStorage に保存済みのプロフィール（なければ null）
+  function getLinkedInProfile() {
+    try {
+      return JSON.parse(localStorage.getItem(LI_STORAGE_KEY));
+    } catch (e) {
+      return null;
+    }
+  }
+
+  async function initLinkedIn() {
+    consumeLinkedInCallbackParams();
+
+    // 環境変数が未設定のサーバーではログインボタンを出さない
+    let configured = false;
+    try {
+      const res = await fetch('/api/linkedin/status');
+      configured = (await res.json()).configured;
+    } catch (e) {
+      configured = false;
+    }
+    renderLinkedInArea(configured);
+  }
+
+  // コールバックから /?li_name=... で戻ってきた分を保存し、URLを綺麗にする
+  function consumeLinkedInCallbackParams() {
+    const params = new URLSearchParams(location.search);
+    if (!params.has('li_name') && !params.has('li_error')) return;
+
+    if (params.has('li_error')) {
+      showLinkedInError(params.get('li_error'));
+    } else {
+      localStorage.setItem(LI_STORAGE_KEY, JSON.stringify({
+        name: params.get('li_name') || '',
+        picture: params.get('li_picture') || '',
+        email: params.get('li_email') || '',
+      }));
+    }
+
+    ['li_name', 'li_picture', 'li_email', 'li_error'].forEach(k => params.delete(k));
+    const rest = params.toString();
+    history.replaceState(null, '', location.pathname + (rest ? '?' + rest : ''));
+  }
+
+  function renderLinkedInArea(configured) {
+    const area = document.getElementById('linkedinArea');
+    if (!area) return;
+
+    const profile = getLinkedInProfile();
+
+    if (profile && profile.name) {
+      const avatar = profile.picture
+        ? '<img src="' + escHtml(profile.picture) + '" alt="">'
+        : '';
+      area.innerHTML = '<div class="li-user">' + avatar +
+        '<span class="li-user-name">' + escHtml(profile.name) + '</span>' +
+        '<button class="btn-li-logout" onclick="linkedInLogout()">ログアウト</button>' +
+      '</div>';
+      return;
+    }
+
+    area.innerHTML = configured
+      ? '<a class="btn-li-login" href="/api/linkedin/auth">' + LI_ICON + '<span>LinkedInでログイン</span></a>'
+      : '';
+  }
+
+  function linkedInLogout() {
+    localStorage.removeItem(LI_STORAGE_KEY);
+    renderLinkedInArea(true);
+  }
+
+  function showLinkedInError(message) {
+    const main = document.querySelector('.main-wrapper') || document.body;
+    const banner = document.createElement('div');
+    banner.className = 'li-banner';
+    banner.textContent = 'LinkedIn: ' + message;
+    main.parentNode.insertBefore(banner, main);
+  }
+
+  // シェアは公開URLを開くだけなのでAPIキー不要（未設定環境でも動く）
+  function liShareButton(jobId) {
+    return '<button class="btn-li-share" title="LinkedInでシェア" ' +
+      'onclick="event.stopPropagation(); shareOnLinkedIn(\'' + jobId + '\')">' +
+      LI_ICON + 'シェア</button>';
+  }
+
+  function shareOnLinkedIn(jobId) {
+    shareUrlOnLinkedIn(location.origin + '/?job=' + encodeURIComponent(jobId));
+  }
+
+  function shareUrlOnLinkedIn(url) {
+    window.open(
+      'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(url),
+      '_blank',
+      'noopener,width=600,height=600'
+    );
+  }
+
+  // インラインの onclick 属性に URL を埋め込む。
+  // まずJS文字列としてエスケープし、その後HTMLエスケープする（順序が重要）。
+  function escAttrJs(str) {
+    const jsSafe = String(str == null ? '' : str)
+      .replace(/\\/g, '\\\\')
+      .replace(/'/g, "\\'");
+    return escHtml(jsSafe);
+  }
 
   // ====== FILTER HANDLERS ======
   function onFilterChange() {
@@ -1068,7 +1460,10 @@
       '<div class="job-tags">' + tags + '</div>' +
       '<div class="job-card-footer">' +
         '<span class="posted-date">掲載日：' + escHtml(postedFormatted) + '</span>' +
-        '<button class="btn-detail" onclick="event.stopPropagation(); openJobDetail(' + job.id + ')">詳細を見る</button>' +
+        '<div class="job-card-actions">' +
+          liShareButton(job.id) +
+          '<button class="btn-detail" onclick="event.stopPropagation(); openJobDetail(' + job.id + ')">詳細を見る</button>' +
+        '</div>' +
       '</div>' +
     '</div>';
   }
