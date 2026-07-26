@@ -1,6 +1,9 @@
 {
   "rewrites": [
     { "source": "/api/indeed-jobs", "destination": "/api/indeed-jobs" },
+    { "source": "/api/linkedin/auth", "destination": "/api/linkedin/auth" },
+    { "source": "/api/linkedin/callback", "destination": "/api/linkedin/callback" },
+    { "source": "/api/linkedin/status", "destination": "/api/linkedin/status" },
     { "source": "/api/jobs/:id", "destination": "/api/jobs/[id]" },
     { "source": "/api/jobs", "destination": "/api/jobs/index" },
     { "source": "/(.*)", "destination": "/public/index.html" }

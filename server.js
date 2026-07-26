@@ -1021,6 +1021,11 @@ app.get('/api/indeed-jobs', (req, res) => {
   res.json({ total: filtered.length, jobs: filtered, updatedAt: stat.mtime });
 });
 
+// LinkedIn連携（Vercelのサーバーレス関数と同じハンドラを共有）
+app.get('/api/linkedin/status', require('./api/linkedin/status'));
+app.get('/api/linkedin/auth', require('./api/linkedin/auth'));
+app.get('/api/linkedin/callback', require('./api/linkedin/callback'));
+
 // Serve index.html for all other routes
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
